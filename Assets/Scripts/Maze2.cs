@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Maze : MonoBehaviour {
+public class Maze2 : MonoBehaviour {
 
 	public IntVector2 size;
 
