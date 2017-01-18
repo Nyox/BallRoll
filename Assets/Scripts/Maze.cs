@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class Maze : MonoBehaviour {
 
 	public IntVector2 size;
 
-	public MazeCell[] cellPrefab;
+
+    public MazeCell[] cellPrefab;
 
 	public float generationStepDelay;
 
@@ -25,13 +27,22 @@ public class Maze : MonoBehaviour {
 
 	private List<MazeRoom> rooms = new List<MazeRoom>();
 
-	public IntVector2 RandomCoordinates {
+    private static Quaternion[] cellRotation = {
+        Quaternion.identity,
+        Quaternion.Euler(0f, 90f, 0f),
+        Quaternion.Euler(0f, 180f, 0f),
+        Quaternion.Euler(0f, 270f, 0f)
+    };
+
+    public IntVector2 RandomCoordinates {
 		get {
 			return new IntVector2(Random.Range(0, size.x), Random.Range(0, size.z));
 		}
 	}
 
-	public bool ContainsCoordinates (IntVector2 coordinate) {
+    public static object Enum { get; private set; }
+
+    public bool ContainsCoordinates (IntVector2 coordinate) {
 		return coordinate.x >= 0 && coordinate.x < size.x && coordinate.z >= 0 && coordinate.z < size.z;
 	}
 
@@ -94,7 +105,8 @@ public class Maze : MonoBehaviour {
 		newCell.name = "Maze Cell " + coordinates.x + ", " + coordinates.z;
 		newCell.transform.parent = transform;
 		newCell.transform.localPosition = new Vector3(coordinates.x - size.x * 0.5f + 0.5f, 0f, coordinates.z - size.z * 0.5f + 0.5f);
-		return newCell;
+        newCell.transform.localRotation = (Quaternion)(cellRotation.GetValue(Random.Range(0, cellRotation.Length - 1)));
+        return newCell;
 	}
 
 	private void CreatePassage (MazeCell cell, MazeCell otherCell, MazeDirection direction) {
